@@ -1,56 +1,51 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+ESX = exports["es_extended"]:getSharedObject()
 
 local function HasArmorVest()
-    local Player = QBCore.Functions.GetPlayerData()
-    local hasVest = QBCore.Functions.HasItem(Config.RequiredVest)
+    local xPlayer = ESX.GetPlayerData()
+    local hasVest = false
+
+    for _, item in pairs(xPlayer.inventory) do
+        if item.name == Config.RequiredVest and item.count > 0 then
+            hasVest = true
+            break
+        end
+    end
+
     return hasVest
 end
 
 local function CanUseArmorType(armorType)
-    local Player = QBCore.Functions.GetPlayerData()
-    local jobName = Player.job.name
-    
+    local xPlayer = ESX.GetPlayerData()
+    local jobName = xPlayer.job.name
+
     if Config.ArmorPlates[armorType].jobs == nil then
         return true
     end
-    
+
     return Config.ArmorPlates[armorType].jobs[jobName] == true
 end
 
 local function ApplyArmorPlate(plateType)
     local armorConfig = Config.ArmorPlates[plateType]
-    
+
     if not HasArmorVest() then
-        lib.notify({
-            title = 'Error',
-            description = 'You need an armor vest to apply plates!',
-            type = 'error'
-        })
+        TriggerEvent('esx:showNotification', '~r~You need an armor vest to apply plates!')
         return
     end
-    
+
     if not CanUseArmorType(plateType) then
-        lib.notify({
-            title = 'Error',
-            description = 'You cannot use this type of armor plate!',
-            type = 'error'
-        })
+        TriggerEvent('esx:showNotification', '~r~You cannot use this type of armor plate!')
         return
     end
-    
+
     local currentArmor = GetPedArmour(PlayerPedId())
     if currentArmor >= armorConfig.maxArmor then
-        lib.notify({
-            title = 'Error',
-            description = 'Maximum armor capacity reached!',
-            type = 'error'
-        })
+        TriggerEvent('esx:showNotification', '~r~Maximum armor capacity reached!')
         return
     end
-    
-    if lib.progressBar({
+
+    if lib.progressCircle({
         duration = armorConfig.useTime,
-        label = 'Applying Armor Plate...',
         useWhileDead = false,
         canCancel = true,
         disable = {
@@ -67,17 +62,9 @@ local function ApplyArmorPlate(plateType)
         local newArmor = math.min(currentArmor + armorConfig.armorIncrease, armorConfig.maxArmor)
         SetPedArmour(PlayerPedId(), newArmor)
         TriggerServerEvent('paradise_armorplate:server:removePlate', armorConfig.item)
-        lib.notify({
-            title = 'Success',
-            description = 'Armor plate applied successfully!',
-            type = 'success'
-        })
+        TriggerEvent('esx:showNotification', '~g~Armor plate applied successfully!')
     else
-        lib.notify({
-            title = 'Cancelled',
-            description = 'Cancelled applying armor plate!',
-            type = 'error'
-        })
+        TriggerEvent('esx:showNotification', '~r~Cancelled applying armor plate!')
     end
 end
 
