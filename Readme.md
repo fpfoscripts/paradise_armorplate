@@ -2,7 +2,7 @@
 
 ## [Preview](https://youtu.be/34XZO9kEaJM)
 
-## Prerequisites
+## Dependencies
 
 - ESX
 - ox_lib
