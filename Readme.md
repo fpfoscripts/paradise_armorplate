@@ -1,6 +1,6 @@
 # Armor Plate System
 
-## (Preview)[https://youtu.be/34XZO9kEaJM]
+## [Preview](https://youtu.be/34XZO9kEaJM)
 
 ## Prerequisites
 
