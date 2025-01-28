@@ -40,7 +40,7 @@ Add the following to `ox_inventory/data/items.lua`:
     client = {
         image = "armor_vest.png",
     }
-}
+},
 ```
 
 Then copy the images from the `images` folder to:
@@ -88,7 +88,7 @@ Add the following to `qb-core/shared/items.lua`:
     shouldClose = true,
     combinable = nil,
     description = 'A Vest To Apply Plates'
-}
+},
 ```
 
 Then copy the images from the `images` folder to:
